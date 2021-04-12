@@ -37,3 +37,9 @@ const purchaseBurgerFail = (error) => {
     error: error,
   };
 };
+
+export const purchaseInit = () => {
+  return {
+    type: actionTypes.PURCHASE_INIT,
+  };
+};
