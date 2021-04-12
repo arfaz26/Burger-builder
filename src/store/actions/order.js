@@ -13,11 +13,11 @@ export const purchaseBurger = (orderData) => {
     axios
       .post("/orders.json", orderData)
       .then((response) => {
-        dispatch(purchaseBurgerSuccess(response.data.id, orderData));
+        dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
       .catch((error) => {
+        console.log(error);
         dispatch(purchaseBurgerFail(error));
-        // console.log(error);
         // this.setState({ loading: false });
       });
   };
