@@ -7,9 +7,20 @@ const input = (props) => {
 
   if (props.inValid && props.shouldValidate && props.touched) {
     inputClasses.push(classes.Invalid);
+    console.log(inputClasses);
   }
   switch (props.elementType) {
     case "input":
+      inputElement = (
+        <input
+          className={inputClasses.join(" ")}
+          {...props.elementConfig}
+          value={props.value}
+          onChange={props.changed}
+        />
+      );
+      break;
+    case "email":
       inputElement = (
         <input
           className={inputClasses.join(" ")}
