@@ -5,6 +5,7 @@ import classes from "./Auth.module.css";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { Redirect } from "react-router-dom";
 
 class Auth extends Component {
   state = {
@@ -40,6 +41,12 @@ class Auth extends Component {
     },
     isSignup: true,
   };
+
+  componentDidMount() {
+    if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
+      this.props.onSetAuthRedirectPath();
+    }
+  }
 
   checkValidity(value, rules) {
     let isValid = true;
@@ -121,29 +128,39 @@ class Auth extends Component {
       />
     ));
     let errorMessage = null;
+
     if (this.props.error) {
       errorMessage = <p>{this.props.error.message}</p>;
     }
     if (this.props.loading) return <Spinner />;
-    else
-      return (
-        <div className={classes.Auth}>
-          {errorMessage}
-          <form onSubmit={this.submitHandler}>
-            {form}
-            <Button btnType="Success">SUBMIT</Button>
-          </form>
-          <Button clicked={this.switchAuthModeHandler} btnType="Danger">
-            SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
-          </Button>
-        </div>
-      );
+    let authenticated = null;
+
+    if (this.props.isAuthenticated) {
+      authenticated = <Redirect to={this.props.authRedirectPath} />;
+    }
+
+    return (
+      <div className={classes.Auth}>
+        {authenticated}
+        {errorMessage}
+        <form onSubmit={this.submitHandler}>
+          {form}
+          <Button btnType="Success">SUBMIT</Button>
+        </form>
+        <Button clicked={this.switchAuthModeHandler} btnType="Danger">
+          SWITCH TO {this.state.isSignup ? "SIGNIN" : "SIGNUP"}
+        </Button>
+      </div>
+    );
   }
 }
 const mapStateToProps = (state) => {
   return {
     loading: state.auth.loading,
     error: state.auth.error,
+    isAuthenticated: state.auth.token !== null,
+    buildingBurger: state.burgerBuilder.building,
+    authRedirectPath: state.auth.authRedirectPath,
   };
 };
 
@@ -151,6 +168,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAuth: (email, password, isSignup) =>
       dispatch(actions.auth(email, password, isSignup)),
+
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
   };
 };
 
