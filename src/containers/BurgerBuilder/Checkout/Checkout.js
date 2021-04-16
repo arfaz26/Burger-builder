@@ -3,29 +3,8 @@ import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import CheckoutSummary from "../../../components/Order/CheckoutSummary/CheckoutSummary";
 import ContactData from "./ContactData/ContactData";
-import * as actions from "../../../store/actions/index";
 
 class Checkout extends Component {
-  // componentWillMount() {
-  //   this.props.onInitPurchase();
-  // }
-
-  // componentWillMount() {
-  //   const query = new URLSearchParams(this.props.location.search);
-  //   const ingredients = {};
-  //   let price = 0;
-  //   for (let param of query.entries()) {
-  //     if (param[0] === "price") {
-  //       price = param[1];
-  //     } else {
-  //       ingredients[param[0]] = +param[1];
-  //     }
-  //   }
-
-  //   this.setState({ ingredients: ingredients, totalPrice: price });
-  //   // console.log(ingredients);
-  // }
-
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
   };
@@ -67,13 +46,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onInitPurchase: () => dispatch(actions.purchaseInit()),
-//   };
-// };
-
-export default connect(
-  mapStateToProps
-  //   mapDispatchToProps
-)(Checkout);
+export default connect(mapStateToProps)(Checkout);
